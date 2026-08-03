@@ -1,0 +1,291 @@
+/* ==========================================================================
+   calendar.css — toolbar, month grid, day cells
+   ========================================================================== */
+
+/* ---------- Toolbar ---------- */
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.cal-nav { display: flex; align-items: center; gap: 10px; }
+
+.cal-title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  min-width: 172px;
+  text-align: center;
+}
+
+.cal-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Month summary pill */
+.month-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 7px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  box-shadow: var(--shadow-xs);
+}
+
+.ms-item { display: flex; flex-direction: column; line-height: 1.2; }
+.ms-item em {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.ms-item small { font-size: 10.5px; color: var(--text-faint); letter-spacing: .02em; }
+.ms-divider { width: 1px; height: 22px; background: var(--border); }
+
+/* ---------- Calendar card ---------- */
+.calendar-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 12px;
+  overflow: hidden;
+}
+
+/* Weekday header */
+.weekday-row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.weekday {
+  text-align: center;
+  padding: 9px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+}
+
+/* Month grid */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+.calendar-grid.swap-in { animation: grid-fade .26s var(--ease) both; }
+@keyframes grid-fade { from { opacity: 0; transform: translateY(6px); } }
+
+/* ---------- Day cell ---------- */
+.day-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-height: 96px;
+  padding: 8px 10px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: right;
+  font-family: inherit;
+  transition: transform var(--t-fast), box-shadow var(--t-fast),
+              border-color var(--t-fast), background var(--t-fast);
+  animation: cell-in .22s var(--ease) both;
+}
+@keyframes cell-in { from { opacity: 0; transform: scale(.985); } }
+
+.day-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  z-index: 2;
+}
+.day-cell:active { transform: translateY(0) scale(.995); }
+.day-cell:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Days outside the displayed month */
+.day-cell.is-outside {
+  background: var(--surface-alt);
+  border-color: #eef0f3;
+  cursor: default;
+  opacity: .55;
+}
+.day-cell.is-outside:hover { transform: none; box-shadow: none; }
+
+/* Day number */
+.day-number {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.day-cell.is-weekend .day-number { color: var(--text-faint); }
+
+/* Today marker */
+.day-cell.is-today .day-number {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px; height: 22px;
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Body of a logged day */
+.day-body {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.day-pnl {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.day-trades {
+  font-size: 11.5px;
+  font-weight: 500;
+  opacity: .78;
+  line-height: 1.2;
+}
+
+/* Colour states */
+.day-cell.is-profit {
+  background: var(--profit-bg);
+  border-color: var(--profit-border);
+}
+.day-cell.is-profit:hover  { background: var(--profit-bg-2); }
+.day-cell.is-profit .day-pnl,
+.day-cell.is-profit .day-trades { color: var(--profit-dark); }
+.day-cell.is-profit .day-number { color: #1c7a45; }
+
+.day-cell.is-loss {
+  background: var(--loss-bg);
+  border-color: var(--loss-border);
+}
+.day-cell.is-loss:hover   { background: var(--loss-bg-2); }
+.day-cell.is-loss .day-pnl,
+.day-cell.is-loss .day-trades { color: var(--loss-dark); }
+.day-cell.is-loss .day-number { color: #a12222; }
+
+.day-cell.is-flat {
+  background: var(--flat-bg);
+  border-color: var(--flat-border);
+}
+.day-cell.is-flat .day-pnl,
+.day-cell.is-flat .day-trades { color: var(--flat); }
+
+/* Notes indicator */
+.note-dot {
+  position: absolute;
+  top: 9px; left: 10px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .5;
+}
+
+/* Add hint on empty cells */
+.day-cell .add-hint {
+  position: absolute;
+  bottom: 9px; left: 10px;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--text-faint);
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity var(--t-fast), transform var(--t-fast);
+  pointer-events: none;
+}
+.day-cell.is-empty:hover .add-hint { opacity: 1; transform: none; }
+
+/* Flash when a day is saved */
+.day-cell.just-saved { animation: saved-pop .55s var(--ease); }
+@keyframes saved-pop {
+  0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(79,70,229,.42); }
+  45%  { transform: scale(1.035); box-shadow: 0 0 0 7px rgba(79,70,229,0); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Legend ---------- */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.legend-item { display: inline-flex; align-items: center; gap: 6px; }
+
+.swatch {
+  width: 12px; height: 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-strong);
+  display: inline-block;
+}
+.swatch-profit { background: var(--profit-bg); border-color: var(--profit-border); }
+.swatch-loss   { background: var(--loss-bg);   border-color: var(--loss-border); }
+.swatch-flat   { background: var(--flat-bg);   border-color: var(--flat-border); }
+.swatch-empty  { background: var(--surface);   border-color: var(--border-strong); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .day-cell   { min-height: 84px; padding: 7px 8px 8px; }
+  .day-pnl    { font-size: 13.5px; }
+  .day-trades { font-size: 11px; }
+}
+
+@media (max-width: 700px) {
+  .calendar-toolbar   { justify-content: center; }
+  .cal-toolbar-right  { width: 100%; justify-content: center; }
+  .cal-title          { min-width: 140px; font-size: 17px; }
+  .calendar-card      { padding: 8px; }
+  .weekday-row,
+  .calendar-grid      { gap: 5px; }
+  .weekday            { font-size: 10.5px; padding: 7px 2px; letter-spacing: .03em; }
+  .day-cell           { min-height: 70px; padding: 5px 6px 6px; border-radius: 10px; }
+  .day-number         { font-size: 11.5px; }
+  .day-pnl            { font-size: 11.5px; }
+  .day-trades         { font-size: 9.5px; }
+  .note-dot           { top: 6px; left: 6px; width: 5px; height: 5px; }
+  .day-cell .add-hint { display: none; }
+}
+
+@media (max-width: 420px) {
+  .day-cell   { min-height: 60px; }
+  .day-pnl    { font-size: 10.5px; letter-spacing: -.03em; }
+  .day-trades { font-size: 9px; }
+  .month-summary { padding: 6px 11px; gap: 10px; }
+}

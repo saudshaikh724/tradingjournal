@@ -1,0 +1,128 @@
+/* ==========================================================================
+   modal.css — add / edit trade-day dialog
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(16, 20, 26, .46);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: overlay-in .18s var(--ease) both;
+}
+.modal-overlay.closing { animation: overlay-out .16s var(--ease) both; }
+
+@keyframes overlay-in  { from { opacity: 0; } }
+@keyframes overlay-out { to   { opacity: 0; } }
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  animation: modal-in .24s var(--ease) both;
+}
+.modal-overlay.closing .modal { animation: modal-out .16s var(--ease) both; }
+
+@keyframes modal-in  { from { opacity: 0; transform: translateY(16px) scale(.97); } }
+@keyframes modal-out { to   { opacity: 0; transform: translateY(8px)  scale(.98); } }
+
+/* ---------- Header ---------- */
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 22px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.modal-subtitle {
+  margin-top: 3px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ---------- Body ---------- */
+.modal-body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+}
+
+/* Quick sign chips */
+.quick-pl { display: flex; gap: 8px; margin-top: -4px; }
+
+.chip {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: var(--r-full);
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast),
+              border-color var(--t-fast), transform var(--t-fast);
+}
+.chip:active { transform: scale(.96); }
+.chip-loss:hover   { background: var(--loss-bg);   color: var(--loss-dark);   border-color: var(--loss-border); }
+.chip-profit:hover { background: var(--profit-bg); color: var(--profit-dark); border-color: var(--profit-border); }
+
+/* Live sign feedback on the P&L input */
+#profit-loss.is-profit { color: var(--profit-dark); font-weight: 600; }
+#profit-loss.is-loss   { color: var(--loss-dark);   font-weight: 600; }
+
+/* ---------- Footer ---------- */
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 22px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+
+.modal-footer .footer-right {
+  display: flex;
+  gap: 9px;
+  margin-left: auto;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 560px) {
+  .modal-overlay { padding: 0; place-items: end center; }
+
+  .modal {
+    max-width: none;
+    max-height: 92vh;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    animation: sheet-in .26s var(--ease) both;
+  }
+  .modal-overlay.closing .modal { animation: sheet-out .18s var(--ease) both; }
+
+  @keyframes sheet-in  { from { transform: translateY(100%); } }
+  @keyframes sheet-out { to   { transform: translateY(100%); } }
+
+  .modal-footer { flex-wrap: wrap; }
+  .modal-footer .btn { flex: 1; }
+  .modal-footer .footer-right { flex: 1 1 100%; }
+}
